@@ -1,0 +1,23 @@
+<script>
+function join(){
+  let id = document.getElementById("partnerId").value;
+  let invites = JSON.parse(localStorage.getItem("invites")) || [];
+
+  let user = invites.find(i => i.token === token);
+
+  if(user && id.length > 3){
+    user.status = "active";
+    localStorage.setItem("invites", JSON.stringify(invites));
+
+    document.getElementById("msg").innerText="Partnership Activated ✅";
+
+    // ⏳ redirect
+    setTimeout(()=>{
+      window.location.href = "index.html";
+    },1500);
+
+  } else {
+    document.getElementById("msg").innerText="Invalid Request ❌";
+  }
+}
+</script>
