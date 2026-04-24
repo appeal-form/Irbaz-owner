@@ -1,28 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Business Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #f0f2f5;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 60px;
+      height: 100vh;
+      background: #fff;
+      position: fixed;
+      border-right: 1px solid #ddd;
+    }
+
+    .sidebar div {
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    /* Main */
+    .main {
+      margin-left: 60px;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn {
+      background: #1877f2;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      background: white;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+
+    .active { background: #d4edda; }
+    .inactive { background: #f8d7da; }
+    .invited { background: #fff3cd; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div>🏠</div>
+  <div>👥</div>
+  <div>⚙️</div>
+</div>
+
+<div class="main">
+
+  <div class="topbar">
+    <h2>Business Portfolio</h2>
+    <button class="btn" onclick="addUser()">+ Invite People</button>
+  </div>
+
+  <table>
+    <tr>
+      <th>Email</th>
+      <th>Access</th>
+      <th>Status</th>
+    </tr>
+
+    <tbody id="tableData">
+    </tbody>
+  </table>
+
+</div>
+
 <script>
-function login(){
-  document.getElementById("msg").innerText="Login Success ✅";
+let users = [
+  {email:"user1@gmail.com", access:"Full Control", status:"active"},
+  {email:"user2@gmail.com", access:"Partial", status:"invited"},
+];
 
-  // ⏳ 1 second baad redirect
-  setTimeout(()=>{
-    window.location.href = "dashboard.html";
-  },1000);
+function render() {
+  let html = "";
+  users.forEach(u => {
+    html += `
+      <tr>
+        <td>${u.email}</td>
+        <td>${u.access}</td>
+        <td><span class="badge ${u.status}">${u.status}</span></td>
+      </tr>
+    `;
+  });
+  document.getElementById("tableData").innerHTML = html;
 }
 
-function sendInvite(){
-  let email = document.getElementById("inviteEmail").value;
-  let token = Math.random().toString(36).substr(2,6);
-
-  let invites = JSON.parse(localStorage.getItem("invites")) || [];
-  invites.push({email, token, status:"invited"});
-  localStorage.setItem("invites", JSON.stringify(invites));
-
-  let link = "join.html?token="+token;
-
-  document.getElementById("msg").innerText = "Invite Link: "+link;
-
-  // Optional redirect
-  setTimeout(()=>{
-    window.location.href = link;
-  },2000);
+function addUser() {
+  let email = prompt("Enter Email:");
+  if(email){
+    users.push({
+      email: email,
+      access: "Partial",
+      status: "invited"
+    });
+    render();
+  }
 }
+
+render();
 </script>
+
+</body>
+</html>
